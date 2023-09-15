@@ -16,6 +16,10 @@ def list_files():
     else:
         return None, response.status_code
 
+def uploadable_files():
+    file_list = os.listdir(FILE_STORAGE_PATH)
+    return file_list
+
 def upload_files(*filenames):
     file_dict = {}
     for i, filename in enumerate(filenames, start=1):
@@ -51,7 +55,7 @@ def delete_files(*filenames):
 
 def file_client_app():
     while True:
-        print("Available commands: list, upload, delete, finish")
+        print("Available commands: list, upload, delete, finish, uploadable")
 
         user_input = input("Enter a command: ")
 
@@ -92,9 +96,15 @@ def file_client_app():
         elif user_input == "finish" or user_input == "exit":
             print("Exiting the application.")
             break  # Exit the loop and terminate the application
-
-
         
+        elif user_input == "uploadable":
+            file_list = uploadable_files()
+            print()
+            for filename in file_list:
+                print(filename)
+            print()
+
+
         else:
             print("Invalid command. Please enter a valid command.")
 
