@@ -59,6 +59,7 @@ def file_client_app():
             filenames, status_code = list_files()
             if filenames is None:
                 print(f"\n[FROM SERVER, ERROR]: no list of files were returned (status code: {status_code})")
+                continue
             print("\n[FROM SERVER, SUCCESS] File List:")
             for filename in filenames:
                 print(filename)
@@ -88,9 +89,11 @@ def file_client_app():
                 else:
                     print(f'\n[FROM SERVER, ERROR({status_code})] from server: {msg}')
             print()
-        elif user_input == "finish":
+        elif user_input == "finish" or user_input == "exit":
             print("Exiting the application.")
             break  # Exit the loop and terminate the application
+
+
         
         else:
             print("Invalid command. Please enter a valid command.")
