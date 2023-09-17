@@ -32,20 +32,19 @@ def upload_files(*filenames):
         return msg, response.status_code
 
 def delete_files(*filenames):
-    file_dict = {}
-    for i, filename in enumerate(filenames, start=1):
-        file_path = os.path.join(FILE_STORAGE_PATH, filename)
-        file_key = f'candidate_file_{i}'
-        file_dict[file_key] = open(file_path, 'rb')
+    data = json.dumps({
+        'filenames': filenames
+    })
 
-    response = requests.post(f'{BASE_URL}/delete-files', files=file_dict)
+    headers = {
+        'Content-Type': 'application/json',
+    }
+    response = requests.post(f'{BASE_URL}/delete-files', data=data, headers=headers)
     if response.status_code == 200:
-        msg = response.json()['message']
-        msg = response.json()['message']
+        msg = response.json().get('meesage')
         return msg, response.status_code
     else:
-        msg = response.json()['error']
-        msg = response.json()['error']
+        msg = response.json().get('meesage')
         return msg, response.status_code
     
 

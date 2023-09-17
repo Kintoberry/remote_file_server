@@ -37,18 +37,18 @@ def upload_files():
 
 @app.route('/delete-files', methods=['POST'])
 def delete_files():
-    if not request.files:
-        return jsonify({'error': 'You must send at least one file.'}), 400
-
-    file_dict = request.files
-    for _, file in file_dict.items():
-        if file.filename == '':
-            return jsonify({'error': 'filename is not given'}), 400
-        target_file_path = os.path.join(FILE_STORAGE_PATH, f'{file.filename}')
+    data = request.get_json()
+    filenames = data.get('filenames')
+    if not filenames:
+        return jsonify({ "error": "no file names were provided."}), 400
+    for filename in filenames:
+        target_file_path = os.path.join(FILE_STORAGE_PATH, f'{filename}')
         if not os.path.exists(target_file_path):
-            return jsonify({'error': f'{file.filename} does not exist'})
+            return jsonify({'error': f'{filename} does not exist'}), 404
+    for filename in filenames:
+        target_file_path = os.path.join(FILE_STORAGE_PATH, f'{filename}')
         os.remove(target_file_path)
-    return jsonify({'message': 'File deleted successfully'})
+    return jsonify({'message': 'Files was deleted successfully'})
 
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=55000, debug=True)
